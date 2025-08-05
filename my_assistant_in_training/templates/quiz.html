@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Тест</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        h1 {
+            color: #092e20;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #092e20;
+            padding-bottom: 10px;
+        }
+        .quiz-container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            border-left: 4px solid #092e20;
+        }
+        .question h3 {
+            margin-top: 0;
+            color: #092e20;
+        }
+        .options {
+            margin-left: 20px;
+        }
+        .option {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        .option:hover {
+            background-color: #e9ecef;
+        }
+        label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        button {
+            background-color: #092e20;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            display: block;
+            margin: 40px auto 0;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #0d3d2a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .result {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 30px;
+            font-size: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .explanation {
+            margin-top: 15px;
+            font-size: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        code {
+            background-color: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+        }
+        .django-icon {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .django-icon img {
+            height: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="django-icon">
+        <img src="https://www.djangoproject.com/m/img/logos/django-logo-positive.png" alt="Django Logo">
+    </div>
+
+    <div class="quiz-container">
+        <h1>Полный тест по Django</h1>
+
+        <form id="quiz-form" method="post" action="{% url 'submit_quiz' %}">
+            {% csrf_token %}
+
+            <!-- Вопрос 1 -->
+            <div class="question">
+                <h3>1. Какое из этих НЕ является преимуществом Django?</h3>
+                <div class="options">
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q1" value="a" required>
+                            Встроенная административная панель
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q1" value="b">
+                            Медленная обработка запросов
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q1" value="c">
+                            Полнофункциональный ORM
+                        </label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation-q1">
+                    <strong>Правильный ответ:</strong> Медленная обработка запросов. Django оптимизирован для быстрой разработки и имеет хорошую производительность.
+                </div>
+            </div>
+
+            <!-- Вопрос 2 -->
+            <div class="question">
+                <h3>2. Когда QuerySet выполняет запрос к базе данных?</h3>
+                <div class="options">
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q2" value="a" required>
+                            При создании QuerySet
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q2" value="b">
+                            При итерации по результатам
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q2" value="c">
+                            При вызове метода <code>execute()</code>
+                        </label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation-q2">
+                    <strong>Правильный ответ:</strong> При итерации по результатам. QuerySet "ленивый" - запрос выполняется только когда реально нужны данные.
+                </div>
+            </div>
+
+            <!-- Вопрос 3 -->
+            <div class="question">
+                <h3>3. Что из этого можно сделать с помощью Django ORM?</h3>
+                <div class="options">
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q3" value="a" required>
+                            Создание индексов в базе данных
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q3" value="b">
+                            Написание хранимых процедур
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q3" value="c">
+                            Все перечисленное
+                        </label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation-q3">
+                    <strong>Правильный ответ:</strong> Все перечисленное. Django ORM поддерживает создание индексов через <code>Meta.indexes</code> и может выполнять сложные операции.
+                </div>
+            </div>
+
+            <!-- Вопрос 4 -->
+            <div class="question">
+                <h3>4. В чем разница между <code>annotate()</code> и <code>aggregate()</code>?</h3>
+                <div class="options">
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q4" value="a" required>
+                            <code>annotate()</code> для группировки, <code>aggregate()</code> для фильтрации
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q4" value="b">
+                            <code>annotate()</code> добавляет поля к объектам, <code>aggregate()</code> возвращает словарь
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q4" value="c">
+                            Нет различий, это синонимы
+                        </label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation-q4">
+                    <strong>Правильный ответ:</strong> <code>annotate()</code> добавляет вычисляемые поля к каждому объекту, <code>aggregate()</code> возвращает словарь с общими значениями.
+                </div>
+            </div>
+
+            <!-- Вопрос 5 -->
+            <div class="question">
+                <h3>5. Что такое F-выражения в Django ORM?</h3>
+                <div class="options">
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q5" value="a" required>
+                            Способ выполнения сырых SQL-запросов
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q5" value="b">
+                            Ссылки на значения полей модели для использования в запросах
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q5" value="c">
+                            Способ создания миграций
+                        </label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation-q5">
+                    <strong>Правильный ответ:</strong> F-выражения позволяют ссылаться на значения полей модели непосредственно в запросах.
+                </div>
+            </div>
+
+            <!-- Вопрос 6 -->
+            <div class="question">
+                <h3>6. Какой шаблон проектирования использует Django?</h3>
+                <div class="options">
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q6" value="a" required>
+                            MVC (Model-View-Controller)
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q6" value="b">
+                            MTV (Model-Template-View)
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q6" value="c">
+                            MVVM (Model-View-ViewModel)
+                        </label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation-q6">
+                    <strong>Правильный ответ:</strong> Django использует MTV (Model-Template-View), что похоже на MVC, но с другими названиями компонентов.
+                </div>
+            </div>
+
+            <!-- Вопрос 7 -->
+            <div class="question">
+                <h3>7. Для чего нужен метод <code>dispatch()</code> во View?</h3>
+                <div class="options">
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q7" value="a" required>
+                            Для отправки данных в шаблон
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q7" value="b">
+                            Для маршрутизации HTTP-запросов на соответствующие методы
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q7" value="c">
+                            Для создания миграций базы данных
+                        </label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation-q7">
+                    <strong>Правильный ответ:</strong> Метод <code>dispatch()</code> определяет, какой метод (get, post и т.д.) должен обработать запрос.
+                </div>
+            </div>
+
+            <!-- Вопрос 8 -->
+            <div class="question">
+                <h3>8. Что такое Django Channels?</h3>
+                <div class="options">
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q8" value="a" required>
+                            Система управления контентом
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q8" value="b">
+                            Расширение для работы с WebSockets и протоколами в реальном времени
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q8" value="c">
+                            Инструмент для создания API
+                        </label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation-q8">
+                    <strong>Правильный ответ:</strong> Django Channels добавляет поддержку WebSockets, long-polling и других протоколов в реальном времени.
+                </div>
+            </div>
+
+            <!-- Вопрос 9 -->
+            <div class="question">
+                <h3>9. Что означает "батарейки в комплекте" в Django?</h3>
+                <div class="options">
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q9" value="a" required>
+                            Встроенная поддержка батареек для мобильных устройств
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q9" value="b">
+                            Большое количество встроенных функций и компонентов
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q9" value="c">
+                            Система энергосбережения для серверов
+                        </label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation-q9">
+                    <strong>Правильный ответ:</strong> Django включает множество готовых компонентов (аутентификация, админка, ORM и т.д.), что ускоряет разработку.
+                </div>
+            </div>
+
+            <!-- Вопрос 10 -->
+            <div class="question">
+                <h3>10. Какой HTTP-метод используется для создания ресурса в REST API?</h3>
+                <div class="options">
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q10" value="a" required>
+                            GET
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q10" value="b">
+                            POST
+                        </label>
+                    </div>
+                    <div class="option">
+                        <label>
+                            <input type="radio" name="q10" value="c">
+                            PUT
+                        </label>
+                    </div>
+                </div>
+                <div class="explanation" id="explanation-q10">
+                    <strong>Правильный ответ:</strong> POST используется для создания ресурса, PUT - для полного обновления существующего.
+                </div>
+            </div>
+
+            <button type="submit" id="submit-btn">Проверить ответы</button>
+            <div class="result" id="result"></div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('quiz-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Правильные ответы
+            const answers = {
+                q1: 'b',
+                q2: 'b',
+                q3: 'c',
+                q4: 'b',
+                q5: 'b',
+                q6: 'b',
+                q7: 'b',
+                q8: 'b',
+                q9: 'b',
+                q10: 'b'
+            };
+
+            let score = 0;
+            const totalQuestions = Object.keys(answers).length;
+
+            // Проверка каждого вопроса
+            for (const question in answers) {
+                const selectedOption = document.querySelector(`input[name="${question}"]:checked`);
+                const explanation = document.getElementById(`explanation-${question}`);
+
+                if (selectedOption) {
+                    if (selectedOption.value === answers[question]) {
+                        score++;
+                        explanation.style.display = 'block';
+                        explanation.classList.add('correct');
+                        explanation.classList.remove('incorrect');
+                    } else {
+                        explanation.style.display = 'block';
+                        explanation.classList.add('incorrect');
+                        explanation.classList.remove('correct');
+                    }
+                } else {
+                    explanation.style.display = 'block';
+                    explanation.classList.add('incorrect');
+                    explanation.classList.remove('correct');
+                }
+            }
+
+            // Вывод результата
+            const resultElement = document.getElementById('result');
+            resultElement.textContent = `Ваш результат: ${score} из ${totalQuestions}`;
+            resultElement.className = 'result ' + (score === totalQuestions ? 'correct' : 'incorrect');
+
+            // Прокрутка к результату
+            resultElement.scrollIntoView({ behavior: 'smooth' });
+
+            // Отправка результатов на сервер
+            fetch("{% url 'submit_quiz' %}", {
+                method: 'POST',
+                body: new FormData(this),
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            });
+        });
+    </script>
+</body>
+</html>
