@@ -42,7 +42,6 @@ class TelegramBot(AbstractTelegramBot):
 
     @async_timed
     async def start(self, u: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-        logging.info('q')
         async with await self.get_db_session() as session:
             today = datetime.now().date()
 
@@ -66,14 +65,13 @@ class TelegramBot(AbstractTelegramBot):
 
         async with await self.get_db_session() as session:
             sel_data = await select_data()
-
             logging.warning(f'кол-во вопросов, {len(sel_data)}')
             logging.warning(f'номер вопроса, {context.user_data["current_question"]}')
             if len(sel_data)!=0:
                 question_num = context.user_data["current_question"]  # номер вопроса
-                res = [dict(row) for row in sel_data]
-                variant = res[question_num]['options'].split(',')
-                question = res[question_num]
+                # res = [dict(row) for row in sel_data]
+                variant = sel_data[question_num]['options'].split('","')
+                question = sel_data[question_num]
                 keyboard = [
                     [InlineKeyboardButton(option, callback_data=f"ans_{i}")]
                     for i, option in enumerate(variant)
@@ -94,6 +92,7 @@ class TelegramBot(AbstractTelegramBot):
             else:
                 logging.warning('все')
                 await u.message.reply_text('Пока ты выполняешь тесты быстрее чем я мог подумать:)!')
+
     @async_timed
     async def handle_answer(self, u: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         query = u.callback_query

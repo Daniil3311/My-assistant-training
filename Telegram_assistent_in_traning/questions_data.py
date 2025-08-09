@@ -315,3 +315,15 @@ QUESTIONS_new = {
         "correct": 0
     }
 }
+""" 1: {
+        "text": "Какие основные сущности есть в Django REST Framework?",
+        "options": [
+            "Viewsets, Serializers, Routers, Permissions",
+            "Models, Templates, Views",
+            "Forms, Admin, Signals",
+            "Middleware, Context, Handlers"
+        ],
+        "correct": 0"""
+
+
+print(QUESTIONS_Django[1]['options'])

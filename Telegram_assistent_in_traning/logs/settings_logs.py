@@ -1,6 +1,6 @@
 import logging
 
-logging.getLogger("httpx").setLevel(logging.WARNING)
+# logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.basicConfig(
     filename='logs/app.log',          # Файл для записи логов
     filemode='a',                # Режим записи ('a' - append, 'w' - overwrite)
